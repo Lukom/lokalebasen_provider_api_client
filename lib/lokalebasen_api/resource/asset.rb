@@ -11,7 +11,7 @@ module LokalebasenApi
         @association_proxy = association_proxy
       end
 
-      def create(photo_url, asset_ext_key, position=nil)
+      def create(photo_url, asset_ext_key, position = nil)
         data = asset_data(asset_ext_key, photo_url, position)
         post_response = location_resource.rels[resource_name].post(data)
         LokalebasenApi::ResponseChecker.check(post_response) do |response|
@@ -41,9 +41,9 @@ module LokalebasenApi
       end
 
       def find_asset(asset_ext_key)
-        asset = assets.detect{ |asset| asset.external_key == asset_ext_key }
+        asset = assets.detect { |asset| asset.external_key == asset_ext_key }
         if asset.nil?
-          raise NotFoundException, "#{self.class} with external_key "\
+          fail NotFoundException, "#{self.class} with external_key "\
             "'#{asset_ext_key}', not found on #{location_resource.external_key}!"
         end
         yield asset
@@ -52,7 +52,7 @@ module LokalebasenApi
       def assets
         return [] unless location_has_assets?
         result = location_resource.send(association_proxy)
-        result = Array[result] unless result.kind_of?(Array)
+        result = Array[result] unless result.is_a?(Array)
         result
       end
 
@@ -84,11 +84,11 @@ module LokalebasenApi
       end
 
       def class_name_without_scopes
-        self.class.name.split("::").last
+        self.class.name.split('::').last
       end
 
       def underscore(camel_cased_word)
-        camel_cased_word.gsub(/([a-z\d])([A-Z])/,'\1_\2')
+        camel_cased_word.gsub(/([a-z\d])([A-Z])/, '\1_\2')
       end
     end
   end

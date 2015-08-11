@@ -1,7 +1,6 @@
 module LokalebasenApi
   module Resource
     module HTTPMethodPermissioning
-
       private
 
       # PATCH: Because Lokalebasen API relations URLs do not include possible REST methods, Sawyer defaults to :get only.

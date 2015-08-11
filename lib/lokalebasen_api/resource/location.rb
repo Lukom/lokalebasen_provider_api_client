@@ -18,7 +18,7 @@ module LokalebasenApi
       end
 
       def exists?(external_key)
-        all.any? {|location| location.external_key == external_key }
+        all.any? { |location| location.external_key == external_key }
       end
 
       def create(location_params)
@@ -81,7 +81,7 @@ module LokalebasenApi
       def detect_location_from(locations, external_key)
         location = locations.detect { |location| location.external_key == external_key }
         if location.nil?
-          raise LokalebasenApi::NotFoundException.new("Location with external_key '#{external_key}', not found!")
+          fail LokalebasenApi::NotFoundException.new("Location with external_key '#{external_key}', not found!")
         end
         if block_given?
           yield location

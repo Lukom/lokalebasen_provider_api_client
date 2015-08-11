@@ -1,16 +1,16 @@
 require 'spec_helper'
 
 describe LokalebasenApi do
-  let(:url)    { "http://www.service_url.com" }
-  let(:client) { double("Client") }
+  let(:url)    { 'http://www.service_url.com' }
+  let(:client) { double('Client') }
 
   let(:credentials) do
     {
-      api_key: "MyApiKey"
+      api_key: 'MyApiKey'
     }
   end
 
-  it "returns a client with given arguments" do
+  it 'returns a client with given arguments' do
     allow(LokalebasenApi::Client)
       .to receive(:new)
       .and_return(client)

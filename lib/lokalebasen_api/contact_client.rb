@@ -50,12 +50,12 @@ module LokalebasenApi
 
     private
 
-      def contact_resource
-        Resource::Contact.new(root_resource)
-      end
+    def contact_resource
+      Resource::Contact.new(root_resource)
+    end
 
-      def root_resource
-        Resource::Root.new(agent).get
-      end
+    def root_resource
+      Resource::Root.new(agent).get
+    end
   end
 end

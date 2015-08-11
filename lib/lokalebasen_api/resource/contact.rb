@@ -66,7 +66,7 @@ module LokalebasenApi
       def find_contact_from_contact_list(external_key)
         contact = all.detect { |contact| contact.external_key == external_key }
         if contact.nil?
-          raise LokalebasenApi::NotFoundException.new("Contact with external_key '#{external_key}', not found!")
+          fail LokalebasenApi::NotFoundException.new("Contact with external_key '#{external_key}', not found!")
         end
         yield contact
       end

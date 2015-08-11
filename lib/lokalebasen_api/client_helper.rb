@@ -2,15 +2,14 @@ module LokalebasenApi
   module ClientHelper
     def check_response(response)
       case response.status
-        when (400..499) then (fail "Error occured -> #{response.data.message}")
-        when (500..599) then (fail "Server error -> #{error_msg(response)}")
-        else nil
+      when (400..499) then (fail "Error occured -> #{response.data.message}")
+      when (500..599) then (fail "Server error -> #{error_msg(response)}")
       end
     end
 
     def error_msg(response)
-      if response.data.index("html")
-        "Server returned HTML in error"
+      if response.data.index('html')
+        'Server returned HTML in error'
       else
         data
       end

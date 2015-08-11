@@ -11,21 +11,20 @@ module LokalebasenApi
     extend Forwardable
 
     def_delegators :location_client, :locations, :location, :exists?,
-                                     :create_location, :update_location,
-                                     :deactivate, :activate, :create_photo,
-                                     :update_photo,
-                                     :delete_photo, :create_prospectus,
-                                     :delete_prospectus, :create_floorplan,
-                                     :delete_floorplan
-
+                   :create_location, :update_location,
+                   :deactivate, :activate, :create_photo,
+                   :update_photo,
+                   :delete_photo, :create_prospectus,
+                   :delete_prospectus, :create_floorplan,
+                   :delete_floorplan
 
     def_delegators :contact_client, :contacts, :find_contact_by_external_key,
-                                    :create_contact, :update_contact_by_resource,
-                                    :find_contact_by_email
+                   :create_contact, :update_contact_by_resource,
+                   :find_contact_by_email
 
     def_delegators :subscription_client, :create_subscription,
-                                         :subscriptions_for_location,
-                                         :delete_subscription
+                   :subscriptions_for_location,
+                   :delete_subscription
 
     attr_reader :logger, :agent
 
@@ -36,10 +35,10 @@ module LokalebasenApi
       @api_key     = credentials[:api_key]
       @service_url = service_url
       @logger      = options.fetch(:logger) { nil }
-      @agent       = options.fetch(:agent) { default_agent}
+      @agent       = options.fetch(:agent) { default_agent }
 
-      raise "api_key required" if @api_key.nil?
-      raise "service_url required" if @service_url.nil?
+      fail 'api_key required' if @api_key.nil?
+      fail 'service_url required' if @service_url.nil?
     end
 
     # Deletes specified resource
@@ -66,34 +65,30 @@ module LokalebasenApi
 
     private
 
-      def subscription_client
-        LokalebasenApi::SubscriptionClient.new
-      end
+    def subscription_client
+      LokalebasenApi::SubscriptionClient.new
+    end
 
-      def location_client
-        LokalebasenApi::LocationClient.new(agent)
-      end
+    def location_client
+      LokalebasenApi::LocationClient.new(agent)
+    end
 
-      def contact_client
-        @contact_client ||= LokalebasenApi::ContactClient.new(agent)
-      end
+    def contact_client
+      @contact_client ||= LokalebasenApi::ContactClient.new(agent)
+    end
 
-      def default_agent
-        Sawyer::Agent.new(service_url) do |http|
-          http.headers['Content-Type'] = 'application/json'
-          http.headers['Api-Key'] = @api_key
-        end
+    def default_agent
+      Sawyer::Agent.new(service_url) do |http|
+        http.headers['Content-Type'] = 'application/json'
+        http.headers['Api-Key'] = @api_key
       end
+    end
 
-      def service_url
-        @service_url
-      end
+    attr_reader :service_url
 
-      def debug(message)
-        if logger
-          logger.debug("ProviderApiClient") { message }
-        end
-      end
+    def debug(message)
+      logger.debug('ProviderApiClient') { message } if logger
+    end
   end
 
   class NotFoundException < StandardError
@@ -101,5 +96,4 @@ module LokalebasenApi
       super(msg)
     end
   end
-
 end

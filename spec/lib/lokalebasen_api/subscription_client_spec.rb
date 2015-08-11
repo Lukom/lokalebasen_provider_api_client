@@ -1,21 +1,21 @@
 require 'spec_helper'
 
 describe LokalebasenApi::SubscriptionClient do
-  let(:location_resource)     { double("LocationResource") }
-  let(:subscription_resource) { double("SubscriptionResource") }
+  let(:location_resource)     { double('LocationResource') }
+  let(:subscription_resource) { double('SubscriptionResource') }
 
   let(:contact_resource) do
     double(
-      "ContactResource",
+      'ContactResource',
       rels: {
-        self: double(href: "http://www.contact.dk/1")
+        self: double(href: 'http://www.contact.dk/1')
       }
     )
   end
 
-  it "returns a list of mapified subscriptions for the given location" do
-    subscriptions = [double("Subscription")]
-    mapped_subscription = double("MappedSubscription")
+  it 'returns a list of mapified subscriptions for the given location' do
+    subscriptions = [double('Subscription')]
+    mapped_subscription = double('MappedSubscription')
 
     allow(LokalebasenApi::Resource::Subscription)
       .to receive_message_chain(:new, :all)
@@ -29,26 +29,26 @@ describe LokalebasenApi::SubscriptionClient do
       .to match_array([mapped_subscription])
   end
 
-  it "creates a sugsbscription by a given location resource and contact resource" do
+  it 'creates a sugsbscription by a given location resource and contact resource' do
     allow(LokalebasenApi::Resource::Subscription)
       .to receive(:new)
       .and_return(subscription_resource)
 
-    subscription_params = { contact: "http://www.contact.dk/1" }
+    subscription_params = { contact: 'http://www.contact.dk/1' }
 
     expect(subscription_resource)
-      .to receive(:create).
-      with(subscription_params)
+      .to receive(:create)
+      .with(subscription_params)
 
-    LokalebasenApi::SubscriptionClient.new.
-      create_subscription(location_resource, contact_resource)
+    LokalebasenApi::SubscriptionClient.new
+      .create_subscription(location_resource, contact_resource)
   end
 
-  it "returns a mapped version of the response after create" do
+  it 'returns a mapped version of the response after create' do
     allow(LokalebasenApi::Resource::Subscription)
       .to receive_message_chain(:new, :create)
 
-    mapped_subscription = double("MappedSubscription")
+    mapped_subscription = double('MappedSubscription')
 
     allow(LokalebasenApi::Mapper::Subscription)
       .to receive_message_chain(:new, :mapify)
@@ -58,8 +58,8 @@ describe LokalebasenApi::SubscriptionClient do
       .to eq(mapped_subscription)
   end
 
-  it "deletes a subscription by the resource" do
-    subscription = double("Subscription")
+  it 'deletes a subscription by the resource' do
+    subscription = double('Subscription')
 
     allow(LokalebasenApi::Resource::Subscription)
       .to receive(:new)

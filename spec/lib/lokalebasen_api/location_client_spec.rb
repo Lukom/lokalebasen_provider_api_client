@@ -1,21 +1,21 @@
 require 'spec_helper'
 
 describe LokalebasenApi::LocationClient do
-  let(:agent) { double("Agent") }
+  let(:agent) { double('Agent') }
 
   before do
     allow(LokalebasenApi::Resource::Root)
       .to receive_message_chain(:new, :get)
   end
 
-  it "returns all location resources as map" do
-    mapped_location = double("MappedLocation")
+  it 'returns all location resources as map' do
+    mapped_location = double('MappedLocation')
 
     allow(LokalebasenApi::Mapper::Location)
       .to receive_message_chain(:new, :mapify)
       .and_return(mapped_location)
 
-    location_resources = 2.times.map { double("LocationResource") }
+    location_resources = 2.times.map { double('LocationResource') }
 
     allow(LokalebasenApi::Resource::Location)
       .to receive_message_chain(:new, :all)
@@ -27,85 +27,85 @@ describe LokalebasenApi::LocationClient do
       .to eq(mapped_locations)
   end
 
-  it "returns a mapped resource by external key" do
+  it 'returns a mapped resource by external key' do
     allow(LokalebasenApi::Resource::Location)
       .to receive_message_chain(:new, :find_by_external_key)
 
-    mapped_location = double("MappedLocation")
+    mapped_location = double('MappedLocation')
 
     allow(LokalebasenApi::Mapper::Location)
       .to receive_message_chain(:new, :mapify)
       .and_return(mapped_location)
 
-    expect(LokalebasenApi::LocationClient.new(agent).location("ext_key"))
+    expect(LokalebasenApi::LocationClient.new(agent).location('ext_key'))
       .to eq(mapped_location)
   end
 
-  it "returns a mapped result of the location creation" do
+  it 'returns a mapped result of the location creation' do
     allow(LokalebasenApi::Resource::Location)
       .to receive_message_chain(:new, :create)
 
-    mapped_location = double("MappedLocation")
+    mapped_location = double('MappedLocation')
 
     allow(LokalebasenApi::Mapper::Location)
       .to receive_message_chain(:new, :mapify)
       .and_return(mapped_location)
 
-    location_params = { :location => { :external_key => "external_key "}}
+    location_params = { location: { external_key: 'external_key ' } }
 
     expect(LokalebasenApi::LocationClient.new(agent).create_location(location_params))
       .to eq(mapped_location)
   end
 
-  it "returns a mapped result of the updated location" do
+  it 'returns a mapped result of the updated location' do
     allow(LokalebasenApi::Resource::Location)
       .to receive_message_chain(:new, :update)
 
-    mapped_location = double("MappedLocation")
+    mapped_location = double('MappedLocation')
 
     allow(LokalebasenApi::Mapper::Location)
       .to receive_message_chain(:new, :mapify)
       .and_return(mapped_location)
 
-    location_params = { "location" => { "external_key" => "external_key "}}
+    location_params = { 'location' => { 'external_key' => 'external_key ' } }
 
     expect(LokalebasenApi::LocationClient.new(agent).update_location(location_params))
       .to eq(mapped_location)
   end
 
-  it "returns a mapped result of the deactivated location" do
+  it 'returns a mapped result of the deactivated location' do
     allow(LokalebasenApi::Resource::Location)
       .to receive_message_chain(:new, :deactivate)
 
-    mapped_location = double("MappedLocation")
+    mapped_location = double('MappedLocation')
 
     allow(LokalebasenApi::Mapper::Location)
       .to receive_message_chain(:new, :mapify)
       .and_return(mapped_location)
 
-    expect(LokalebasenApi::LocationClient.new(agent).deactivate("external_key"))
+    expect(LokalebasenApi::LocationClient.new(agent).deactivate('external_key'))
       .to eq(mapped_location)
   end
 
-  it "returns a mapped result of the activated location" do
+  it 'returns a mapped result of the activated location' do
     allow(LokalebasenApi::Resource::Location)
       .to receive_message_chain(:new, :activate)
 
-    mapped_location = double("MappedLocation")
+    mapped_location = double('MappedLocation')
 
     allow(LokalebasenApi::Mapper::Location)
       .to receive_message_chain(:new, :mapify)
       .and_return(mapped_location)
 
-    expect(LokalebasenApi::LocationClient.new(agent).activate("external_key"))
+    expect(LokalebasenApi::LocationClient.new(agent).activate('external_key'))
       .to eq(mapped_location)
   end
 
-  context "dealing with assets" do
-    let(:asset_ext_key)    { "asset_ext_key" }
-    let(:location_ext_key) { "location_ext_key" }
-    let(:asset_url)        { "http://myhost.com/image/123" }
-    let(:location)         { double("Location") }
+  context 'dealing with assets' do
+    let(:asset_ext_key)    { 'asset_ext_key' }
+    let(:location_ext_key) { 'location_ext_key' }
+    let(:asset_url)        { 'http://myhost.com/image/123' }
+    let(:location)         { double('Location') }
     let!(:asset_resource)  { asset_resource_class.new(location) }
 
     let(:location_client) do
@@ -118,12 +118,12 @@ describe LokalebasenApi::LocationClient do
         .and_return(asset_resource)
     end
 
-    shared_examples "an asset client" do |asset_type|
+    shared_examples 'an asset client' do |asset_type|
       it "returns a mapped job when creating a #{asset_type}" do
         allow(LokalebasenApi::Resource::Location)
           .to receive_message_chain(:new, :find_by_external_key)
 
-        mapped_job = double("MappedJob")
+        mapped_job = double('MappedJob')
 
         allow(LokalebasenApi::Mapper::Job)
           .to receive_message_chain(:new, :mapify)
@@ -160,13 +160,13 @@ describe LokalebasenApi::LocationClient do
       end
     end
 
-    describe "photos" do
+    describe 'photos' do
       let(:asset_resource_class) { LokalebasenApi::Resource::Photo }
 
-      it_behaves_like "an asset client", :photo do
+      it_behaves_like 'an asset client', :photo do
       end
 
-      it "creates a photo" do
+      it 'creates a photo' do
         allow(LokalebasenApi::Resource::Location)
           .to receive_message_chain(:new, :find_by_external_key)
         allow(LokalebasenApi::Mapper::Job)
@@ -177,7 +177,7 @@ describe LokalebasenApi::LocationClient do
           .with(asset_url, asset_ext_key, 1)
 
         location_client.public_send(
-          "create_photo",
+          'create_photo',
           asset_url,
           asset_ext_key,
           location_ext_key,
@@ -186,13 +186,13 @@ describe LokalebasenApi::LocationClient do
       end
     end
 
-    describe "prospectus" do
+    describe 'prospectus' do
       let(:asset_resource_class) { LokalebasenApi::Resource::Prospectus }
 
-      it_behaves_like "an asset client", :prospectus do
+      it_behaves_like 'an asset client', :prospectus do
       end
 
-      it "creates a prospectus" do
+      it 'creates a prospectus' do
         allow(LokalebasenApi::Resource::Location)
           .to receive_message_chain(:new, :find_by_external_key)
         allow(LokalebasenApi::Mapper::Job)
@@ -203,7 +203,7 @@ describe LokalebasenApi::LocationClient do
           .with(asset_url, asset_ext_key)
 
         location_client.public_send(
-          "create_prospectus",
+          'create_prospectus',
           asset_url,
           asset_ext_key,
           location_ext_key
@@ -211,13 +211,13 @@ describe LokalebasenApi::LocationClient do
       end
     end
 
-    describe "floor plans" do
+    describe 'floor plans' do
       let(:asset_resource_class) { LokalebasenApi::Resource::FloorPlan }
 
-      it_behaves_like "an asset client", :floorplan do
+      it_behaves_like 'an asset client', :floorplan do
       end
 
-      it "creates a floor plan" do
+      it 'creates a floor plan' do
         allow(LokalebasenApi::Resource::Location)
           .to receive_message_chain(:new, :find_by_external_key)
         allow(LokalebasenApi::Mapper::Job)
@@ -228,7 +228,7 @@ describe LokalebasenApi::LocationClient do
           .with(asset_url, asset_ext_key, 1)
 
         location_client.public_send(
-          "create_floorplan",
+          'create_floorplan',
           asset_url,
           asset_ext_key,
           location_ext_key,

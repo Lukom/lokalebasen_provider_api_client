@@ -30,7 +30,7 @@ module LokalebasenApi
     private
 
     def error_msg(response)
-      return "Server returned HTML in error" if response.data.index("html")
+      return 'Server returned HTML in error' if response.data.index('html')
       response.data
     end
   end

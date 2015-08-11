@@ -39,10 +39,10 @@ module LokalebasenApi
       ).mapify
     end
 
-     # @return [Map] updated location
+    # @return [Map] updated location
     def update_location(location)
       Mapper::Location.new(
-        location_resource.update(location["location"]["external_key"], location)
+        location_resource.update(location['location']['external_key'], location)
       ).mapify
     end
 
@@ -66,7 +66,7 @@ module LokalebasenApi
 
     # Creates a photo create background job on the specified location
     # @return [Map] created job
-    def create_photo(photo_url, photo_ext_key, location_ext_key, position=nil)
+    def create_photo(photo_url, photo_ext_key, location_ext_key, position = nil)
       location = location_resource.find_by_external_key(location_ext_key)
       photo = Resource::Photo.new(location).create(photo_url, photo_ext_key, position)
       Mapper::Job.new(photo).mapify
@@ -104,7 +104,7 @@ module LokalebasenApi
 
     # Creates a floorplan create background job on the specified location
     # @return [Map] created job
-    def create_floorplan(floor_plan_url, floor_plan_ext_key, location_ext_key, position=nil)
+    def create_floorplan(floor_plan_url, floor_plan_ext_key, location_ext_key, position = nil)
       location = location_resource.find_by_external_key(location_ext_key)
       floor_plan = Resource::FloorPlan.new(location).create(floor_plan_url,
                                                             floor_plan_ext_key, position)

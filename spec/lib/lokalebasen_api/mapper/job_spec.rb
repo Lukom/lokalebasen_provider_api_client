@@ -1,14 +1,14 @@
 require 'spec_helper'
 
 describe LokalebasenApi::Mapper::Job do
-  let(:self_href) { double("http://www.something.com") }
-  let(:relation)  { double("Self", href_template: self_href) }
+  let(:self_href) { double('http://www.something.com') }
+  let(:relation)  { double('Self', href_template: self_href) }
 
   let(:resource) do
     double(
-      "Resource",
+      'Resource',
       to_hash: {
-        external_key: "ext_key"
+        external_key: 'ext_key'
       },
       rels: {
         self: relation
@@ -16,9 +16,9 @@ describe LokalebasenApi::Mapper::Job do
     )
   end
 
-  it "mapifies a resource" do
+  it 'mapifies a resource' do
     expected_value = {
-      external_key: "ext_key",
+      external_key: 'ext_key',
       url: self_href
     }
 

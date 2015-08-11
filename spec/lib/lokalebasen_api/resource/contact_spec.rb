@@ -11,19 +11,19 @@ describe LokalebasenApi::Resource::Contact do
 
   let(:contact_params) do
     {
-      external_key: "contact_ext_key1"
+      external_key: 'contact_ext_key1'
     }
   end
 
   before do
-    stub_get(faraday_stubs, "/api/provider", 200, root_fixture)
-    stub_get(faraday_stubs, "/api/provider/contacts", 200, contact_list_fixture)
+    stub_get(faraday_stubs, '/api/provider', 200, root_fixture)
+    stub_get(faraday_stubs, '/api/provider/contacts', 200, contact_list_fixture)
   end
 
-  it "returns all contacts" do
+  it 'returns all contacts' do
     external_key_values = [
-      { external_key: "contact_ext_key1" },
-      { external_key: "contact_ext_key2" }
+      { external_key: 'contact_ext_key1' },
+      { external_key: 'contact_ext_key2' }
     ]
 
     contact_resource.all.each_with_index do |contact, index|
@@ -35,10 +35,10 @@ describe LokalebasenApi::Resource::Contact do
     end
   end
 
-  it "finds a contact by the external key" do
-    stub_get(faraday_stubs, "/api/provider/contacts/123", 200, contact_fixture)
+  it 'finds a contact by the external key' do
+    stub_get(faraday_stubs, '/api/provider/contacts/123', 200, contact_fixture)
 
-    resource = contact_resource.find_by_external_key("contact_ext_key1")
+    resource = contact_resource.find_by_external_key('contact_ext_key1')
 
     expect(resource)
       .to be_an_instance_of(Sawyer::Resource)
@@ -47,34 +47,34 @@ describe LokalebasenApi::Resource::Contact do
       .to include(contact_params)
   end
 
-  it "finds contact_resource with email" do
-    stub_get(faraday_stubs, "/api/provider/contacts/123", 200, contact_fixture)
-    stub_get(faraday_stubs, "/api/provider/contacts/456", 200, contact_456_fixture)
+  it 'finds contact_resource with email' do
+    stub_get(faraday_stubs, '/api/provider/contacts/123', 200, contact_fixture)
+    stub_get(faraday_stubs, '/api/provider/contacts/456', 200, contact_456_fixture)
 
-    resource = contact_resource.find_by_email("nis@ejendomsmaegler.dk")
+    resource = contact_resource.find_by_email('nis@ejendomsmaegler.dk')
 
     expect(resource.rels[:self].get.data.contact.email)
-      .to eq("nis@ejendomsmaegler.dk")
+      .to eq('nis@ejendomsmaegler.dk')
   end
 
-  it "returns nil when no contact_resource with email" do
-    stub_get(faraday_stubs, "/api/provider/contacts/123", 200, contact_fixture)
-    stub_get(faraday_stubs, "/api/provider/contacts/456", 200, contact_456_fixture)
+  it 'returns nil when no contact_resource with email' do
+    stub_get(faraday_stubs, '/api/provider/contacts/123', 200, contact_fixture)
+    stub_get(faraday_stubs, '/api/provider/contacts/456', 200, contact_456_fixture)
 
-    expect(contact_resource.find_by_email("unknown@ejendomsmaegler.dk"))
+    expect(contact_resource.find_by_email('unknown@ejendomsmaegler.dk'))
       .to be_nil
   end
 
-  it "performs the correct requests on creation" do
-    stub_post(faraday_stubs, "/api/provider/contacts", 201, contact_fixture)
+  it 'performs the correct requests on creation' do
+    stub_post(faraday_stubs, '/api/provider/contacts', 201, contact_fixture)
 
     contact_resource.create(contact_params)
 
     faraday_stubs.verify_stubbed_calls
   end
 
-  it "returns a resource with location params on creation" do
-    stub_post(faraday_stubs, "/api/provider/contacts", 201, contact_fixture)
+  it 'returns a resource with location params on creation' do
+    stub_post(faraday_stubs, '/api/provider/contacts', 201, contact_fixture)
 
     contact = contact_resource.create(contact_params)
 
@@ -85,20 +85,20 @@ describe LokalebasenApi::Resource::Contact do
       .to include(contact_params)
   end
 
-  it "updates a contact by a resource" do
-    stub_get(faraday_stubs, "/api/provider/contacts/123", 200, contact_fixture)
-    stub_put(faraday_stubs, "/api/provider/contacts/123", 200, contact_fixture)
+  it 'updates a contact by a resource' do
+    stub_get(faraday_stubs, '/api/provider/contacts/123', 200, contact_fixture)
+    stub_put(faraday_stubs, '/api/provider/contacts/123', 200, contact_fixture)
 
     resource = contact_resource.all.first
-    params = { contact: { external_key: "new_external_key" }}
+    params = { contact: { external_key: 'new_external_key' } }
     contact_resource.update_by_resource(resource, params)
 
     faraday_stubs.verify_stubbed_calls
   end
 
-  it "returns a resource of the updated contact" do
-    stub_get(faraday_stubs, "/api/provider/contacts/123", 200, contact_fixture)
-    stub_put(faraday_stubs, "/api/provider/contacts/123", 200, contact_fixture)
+  it 'returns a resource of the updated contact' do
+    stub_get(faraday_stubs, '/api/provider/contacts/123', 200, contact_fixture)
+    stub_put(faraday_stubs, '/api/provider/contacts/123', 200, contact_fixture)
 
     resource = contact_resource.all.first
     params = { contact: contact_params }
