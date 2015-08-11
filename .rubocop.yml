@@ -9,6 +9,22 @@ Metrics/LineLength:
 Style/Documentation: # No need to write documentation for every module and class
   Enabled: false
 
+Style/MultilineOperationIndentation:
+  Enabled: false
+
 Lint/RescueException:
   Exclude:
     - 'Rakefile'
+
+
+Metrics/AbcSize:
+  Exclude:
+    - 'lib/lokalebasen_api/resource/location.rb'
+
+Metrics/MethodLength:
+  Exclude:
+    - 'spec/support/sawyer/provider_api_fixtures.rb'
+
+Metrics/ModuleLength:
+  Exclude:
+    - 'spec/support/sawyer/provider_api_fixtures.rb'

@@ -5,6 +5,8 @@ require 'forwardable'
 require_relative 'contact_client'
 
 module LokalebasenApi
+  NotFoundException = Class.new(StandardError)
+
   class Client
     include LokalebasenApi::Resource::HTTPMethodPermissioning
     include LokalebasenApi::ClientHelper
@@ -28,9 +30,12 @@ module LokalebasenApi
 
     attr_reader :logger, :agent
 
-    # @param credentials [Hash] e.g. { :api_key => "03e7ad6c157dcfd1195144623d06ad0d2498e9ec" }
-    # @param enable_logging [Boolean] specifies wether the client should log calls
-    # @param service_url [String] URL to root of service e.g. http://IP_ADDRESS:3000/api/provider
+    # @param credentials [Hash] e.g.
+    #        { :api_key => "03e7ad6c157dcfd1195144623d06ad0d2498e9ec" }
+    # @param enable_logging [Boolean] specifies wether the client should
+    #                                 log calls
+    # @param service_url [String] URL to root of service e.g.
+    #                             http://IP_ADDRESS:3000/api/provider
     def initialize(credentials, service_url, options = {})
       @api_key     = credentials[:api_key]
       @service_url = service_url
@@ -50,8 +55,9 @@ module LokalebasenApi
       check_response(response)
     end
 
-    # Sets state on the resource, by calling post on relation defined by relation_type
-    # E.g. set_state(:deactivation, location_resource) #=> location
+    # Sets state on the resource, by calling post on relation
+    # defined by relation_type e.g.
+    # set_state(:deactivation, location_resource) #=> location
     # @param relation_type [Symbol] state e.g. :deactivation
     # @param resource [Sawyer::Resource] the resource to set state on
     # @return [Sawyer::Resource] response
@@ -88,12 +94,6 @@ module LokalebasenApi
 
     def debug(message)
       logger.debug('ProviderApiClient') { message } if logger
-    end
-  end
-
-  class NotFoundException < StandardError
-    def initialize(msg)
-      super(msg)
     end
   end
 end

@@ -16,13 +16,35 @@ describe LokalebasenApi::Resource::Location do
   end
 
   before do
-    stub_get(faraday_stubs, '/api/provider', 200, root_fixture)
-    stub_get(faraday_stubs, '/api/provider/locations', 200, location_list_fixture)
-    stub_get(faraday_stubs, '/api/provider/locations/123', 200, location_fixture)
+    stub_get(
+      faraday_stubs,
+      '/api/provider',
+      200,
+      root_fixture
+    )
+
+    stub_get(
+      faraday_stubs,
+      '/api/provider/locations',
+      200,
+      location_list_fixture
+    )
+
+    stub_get(
+      faraday_stubs,
+      '/api/provider/locations/123',
+      200,
+      location_fixture
+    )
   end
 
   it 'returns all subscriptions' do
-    stub_get(faraday_stubs, '/api/provider/locations/123/subscriptions', 200, subscription_list_fixture)
+    stub_get(
+      faraday_stubs,
+      '/api/provider/locations/123/subscriptions',
+      200,
+      subscription_list_fixture
+    )
 
     subscription_values = [
       { contact: 'http://www.lokalebasen.dk/api/provider/contacts/123' },
@@ -39,7 +61,12 @@ describe LokalebasenApi::Resource::Location do
   end
 
   it 'performs the correct requests when creating a subscription' do
-    stub_post(faraday_stubs, '/api/provider/locations/123/subscriptions', 200, subscription_fixture)
+    stub_post(
+      faraday_stubs,
+      '/api/provider/locations/123/subscriptions',
+      200,
+      subscription_fixture
+    )
 
     params = { contact: '/api/provider/contacts/123' }
     subscription_resource.create(params)
@@ -48,7 +75,12 @@ describe LokalebasenApi::Resource::Location do
   end
 
   it 'returns a sawyer resource on creation' do
-    stub_post(faraday_stubs, '/api/provider/locations/123/subscriptions', 200, subscription_fixture)
+    stub_post(
+      faraday_stubs,
+      '/api/provider/locations/123/subscriptions',
+      200,
+      subscription_fixture
+    )
 
     params = { contact: '/api/provider/contacts/123' }
     subscription = subscription_resource.create(params)
@@ -61,8 +93,19 @@ describe LokalebasenApi::Resource::Location do
   end
 
   it 'performs the correct requests when deleting a subscription' do
-    stub_get(faraday_stubs, '/api/provider/locations/123/subscriptions', 200, subscription_list_fixture)
-    stub_delete(faraday_stubs, '/api/provider/subscriptions/123', 204, {})
+    stub_get(
+      faraday_stubs,
+      '/api/provider/locations/123/subscriptions',
+      200,
+      subscription_list_fixture
+    )
+
+    stub_delete(
+      faraday_stubs,
+      '/api/provider/subscriptions/123',
+      204,
+      {}
+    )
 
     first_subscription = subscription_resource.all.first
     subscription_resource.delete(first_subscription)
@@ -71,8 +114,19 @@ describe LokalebasenApi::Resource::Location do
   end
 
   it 'returns the status code for the delete response' do
-    stub_get(faraday_stubs, '/api/provider/locations/123/subscriptions', 200, subscription_list_fixture)
-    stub_delete(faraday_stubs, '/api/provider/subscriptions/123', 204, {})
+    stub_get(
+      faraday_stubs,
+      '/api/provider/locations/123/subscriptions',
+      200,
+      subscription_list_fixture
+    )
+
+    stub_delete(
+      faraday_stubs,
+      '/api/provider/subscriptions/123',
+      204,
+      {}
+    )
 
     first_subscription = subscription_resource.all.first
 

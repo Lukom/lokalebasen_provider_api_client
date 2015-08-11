@@ -14,6 +14,7 @@ module LokalebasenApi
       def create(photo_url, asset_ext_key, position = nil)
         data = asset_data(asset_ext_key, photo_url, position)
         post_response = location_resource.rels[resource_name].post(data)
+
         LokalebasenApi::ResponseChecker.check(post_response) do |response|
           response.data.job
         end
@@ -22,12 +23,18 @@ module LokalebasenApi
       def update(asset_ext_key, position)
         data = asset_update_data(position)
         asset = get_asset_resource(asset_ext_key)
-        LokalebasenApi::ResponseChecker.check(asset.rels[:self].put(data)).status
+
+        LokalebasenApi::ResponseChecker
+          .check(asset.rels[:self].put(data))
+          .status
       end
 
       def delete(asset_ext_key)
         asset = get_asset_resource(asset_ext_key)
-        LokalebasenApi::ResponseChecker.check(asset.rels[:self].delete).status
+
+        LokalebasenApi::ResponseChecker
+          .check(asset.rels[:self].delete)
+          .status
       end
 
       private
@@ -41,11 +48,14 @@ module LokalebasenApi
       end
 
       def find_asset(asset_ext_key)
-        asset = assets.detect { |asset| asset.external_key == asset_ext_key }
+        asset = assets.detect { |a| a.external_key == asset_ext_key }
+
         if asset.nil?
-          fail NotFoundException, "#{self.class} with external_key "\
-            "'#{asset_ext_key}', not found on #{location_resource.external_key}!"
+          fail NotFoundException,
+               "#{self.class} with external_key '#{asset_ext_key}', not found" \
+               " on #{location_resource.external_key}!"
         end
+
         yield asset
       end
 

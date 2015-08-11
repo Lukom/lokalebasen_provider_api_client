@@ -17,11 +17,20 @@ module LokalebasenApi
 
       def resource_to_map_object(resource)
         res = Map.new(resource)
-        res.floor_plans = res.floor_plans.map(&:to_hash) if res.has?(:floor_plans)
-        res.photos = res.photos.map(&:to_hash) if res.has?(:photos)
+        res.floor_plans = floor_plans(res) if res.has?(:floor_plans)
+        res.photos = photos(res) if res.has?(:photos)
+
         res = Map.new(res.to_hash) # Minor hack
         res.resource = resource
         res
+      end
+
+      def floor_plans(resource)
+        resource.floor_plans.map(&:to_hash)
+      end
+
+      def photos(resource)
+        resource.photos.map(&:to_hash)
       end
     end
   end

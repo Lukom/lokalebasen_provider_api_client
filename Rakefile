@@ -10,7 +10,7 @@ namespace :specs do
   end
 
   RuboCop::RakeTask.new(:rubocop) do |t|
-    t.options << '-R'
+    t.options << '-D'
   end
 
   task :all do

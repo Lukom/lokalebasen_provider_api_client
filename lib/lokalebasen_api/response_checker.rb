@@ -13,12 +13,7 @@ module LokalebasenApi
     end
 
     def check(&block)
-      case response.status
-      when 400..499
-        fail "Error occured -> #{response.data.message}"
-      when 500..599
-        fail "Server error -> #{error_msg(response)}"
-      end
+      check_status
 
       if block.nil?
         response
@@ -28,6 +23,15 @@ module LokalebasenApi
     end
 
     private
+
+    def check_status
+      case response.status
+      when 400..499
+        fail "Error occured -> #{response.data.message}"
+      when 500..599
+        fail "Server error -> #{error_msg(response)}"
+      end
+    end
 
     def error_msg(response)
       return 'Server returned HTML in error' if response.data.index('html')

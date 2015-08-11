@@ -53,7 +53,12 @@ describe LokalebasenApi::LocationClient do
 
     location_params = { location: { external_key: 'external_key ' } }
 
-    expect(LokalebasenApi::LocationClient.new(agent).create_location(location_params))
+    locations =
+      LokalebasenApi::LocationClient
+        .new(agent)
+        .create_location(location_params)
+
+    expect(locations)
       .to eq(mapped_location)
   end
 
@@ -69,7 +74,12 @@ describe LokalebasenApi::LocationClient do
 
     location_params = { 'location' => { 'external_key' => 'external_key ' } }
 
-    expect(LokalebasenApi::LocationClient.new(agent).update_location(location_params))
+    locations =
+      LokalebasenApi::LocationClient
+        .new(agent)
+        .update_location(location_params)
+
+    expect(locations)
       .to eq(mapped_location)
   end
 

@@ -75,7 +75,9 @@ module LokalebasenApi
         .to receive(:update_by_resource)
         .with(input_resource, contact_params)
 
-      ContactClient.new(agent).update_contact_by_resource(input_resource, contact_params)
+      ContactClient
+        .new(agent)
+        .update_contact_by_resource(input_resource, contact_params)
     end
 
     it 'returns a mapped contact of the respone from contact update' do
@@ -85,7 +87,12 @@ module LokalebasenApi
       allow(Resource::Contact)
         .to receive_message_chain(:new, :update_by_resource)
 
-      expect(ContactClient.new(agent).update_contact_by_resource(input_resource, params))
+      contacts =
+        ContactClient
+          .new(agent)
+          .update_contact_by_resource(input_resource, params)
+
+      expect(contacts)
         .to eq(mapped_contact)
     end
   end

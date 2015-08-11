@@ -22,8 +22,19 @@ describe LokalebasenApi::Resource::Location do
   end
 
   before do
-    stub_get(faraday_stubs, '/api/provider', 200, root_fixture)
-    stub_get(faraday_stubs, '/api/provider/locations', 200, location_list_fixture)
+    stub_get(
+      faraday_stubs,
+      '/api/provider',
+      200,
+      root_fixture
+    )
+
+    stub_get(
+      faraday_stubs,
+      '/api/provider/locations',
+      200,
+      location_list_fixture
+    )
   end
 
   it 'returns all locations' do
@@ -42,7 +53,12 @@ describe LokalebasenApi::Resource::Location do
   end
 
   it 'finds a location by the external key' do
-    stub_get(faraday_stubs, '/api/provider/locations/123', 200, location_fixture)
+    stub_get(
+      faraday_stubs,
+      '/api/provider/locations/123',
+      200,
+      location_fixture
+    )
 
     resource = location_resource.find_by_external_key('location_ext_key')
 
@@ -53,7 +69,7 @@ describe LokalebasenApi::Resource::Location do
       .to include(location_params)
   end
 
-  it 'fails with NotFoundException if the no location is found with the given external key' do
+  it 'fails if no location is found with the given external key' do
     expect(lambda do
       location_resource.find_by_external_key('wrong_ext_key')
     end).to raise_error(LokalebasenApi::NotFoundException)
@@ -70,7 +86,12 @@ describe LokalebasenApi::Resource::Location do
   end
 
   it 'performs the correct requests on creation' do
-    stub_post(faraday_stubs, '/api/provider/locations', 201, location_fixture)
+    stub_post(
+      faraday_stubs,
+      '/api/provider/locations',
+      201,
+      location_fixture
+    )
 
     location_resource.create(params)
 
@@ -78,7 +99,12 @@ describe LokalebasenApi::Resource::Location do
   end
 
   it 'returns a resource with location params on creation' do
-    stub_post(faraday_stubs, '/api/provider/locations', 201, location_fixture)
+    stub_post(
+      faraday_stubs,
+      '/api/provider/locations',
+      201,
+      location_fixture
+    )
 
     location = location_resource.create(params)
 
@@ -90,8 +116,19 @@ describe LokalebasenApi::Resource::Location do
   end
 
   it 'performs the correct requests on update' do
-    stub_get(faraday_stubs, '/api/provider/locations/123', 200, location_fixture)
-    stub_put(faraday_stubs, '/api/provider/locations/123', 200, location_fixture)
+    stub_get(
+      faraday_stubs,
+      '/api/provider/locations/123',
+      200,
+      location_fixture
+    )
+
+    stub_put(
+      faraday_stubs,
+      '/api/provider/locations/123',
+      200,
+      location_fixture
+    )
 
     location_resource.update('location_ext_key', params)
 
@@ -99,8 +136,19 @@ describe LokalebasenApi::Resource::Location do
   end
 
   it 'returns a resource with location params on update' do
-    stub_get(faraday_stubs, '/api/provider/locations/123', 200, location_fixture)
-    stub_put(faraday_stubs, '/api/provider/locations/123', 200, location_fixture)
+    stub_get(
+      faraday_stubs,
+      '/api/provider/locations/123',
+      200,
+      location_fixture
+    )
+
+    stub_put(
+      faraday_stubs,
+      '/api/provider/locations/123',
+      200,
+      location_fixture
+    )
 
     location = location_resource.update('location_ext_key', params)
 
@@ -112,8 +160,19 @@ describe LokalebasenApi::Resource::Location do
   end
 
   it 'performs the correct requests on deactivation' do
-    stub_get(faraday_stubs, '/api/provider/locations/123', 200, location_fixture)
-    stub_post(faraday_stubs, '/api/provider/locations/123/deactivations', 200, location_fixture)
+    stub_get(
+      faraday_stubs,
+      '/api/provider/locations/123',
+      200,
+      location_fixture
+    )
+
+    stub_post(
+      faraday_stubs,
+      '/api/provider/locations/123/deactivations',
+      200,
+      location_fixture
+    )
 
     location_resource.deactivate('location_ext_key')
 
@@ -121,8 +180,19 @@ describe LokalebasenApi::Resource::Location do
   end
 
   it 'returns a resource with location params on deactivation' do
-    stub_get(faraday_stubs, '/api/provider/locations/123', 200, location_fixture)
-    stub_post(faraday_stubs, '/api/provider/locations/123/deactivations', 200, location_fixture)
+    stub_get(
+      faraday_stubs,
+      '/api/provider/locations/123',
+      200,
+      location_fixture
+    )
+
+    stub_post(
+      faraday_stubs,
+      '/api/provider/locations/123/deactivations',
+      200,
+      location_fixture
+    )
 
     return_value = location_resource.deactivate('location_ext_key')
 
@@ -134,8 +204,19 @@ describe LokalebasenApi::Resource::Location do
   end
 
   it 'performs the correct requests on activation' do
-    stub_get(faraday_stubs, '/api/provider/locations/123', 200, location_fixture)
-    stub_post(faraday_stubs, '/api/provider/locations/123/activations', 200, location_fixture)
+    stub_get(
+      faraday_stubs,
+      '/api/provider/locations/123',
+      200,
+      location_fixture
+    )
+
+    stub_post(
+      faraday_stubs,
+      '/api/provider/locations/123/activations',
+      200,
+      location_fixture
+    )
 
     location_resource.activate('location_ext_key')
 
@@ -143,8 +224,19 @@ describe LokalebasenApi::Resource::Location do
   end
 
   it 'returns a sawyer resource with correct params on activation' do
-    stub_get(faraday_stubs, '/api/provider/locations/123', 200, location_fixture)
-    stub_post(faraday_stubs, '/api/provider/locations/123/activations', 200, location_fixture)
+    stub_get(
+      faraday_stubs,
+      '/api/provider/locations/123',
+      200,
+      location_fixture
+    )
+
+    stub_post(
+      faraday_stubs,
+      '/api/provider/locations/123/activations',
+      200,
+      location_fixture
+    )
 
     return_value = location_resource.activate('location_ext_key')
 

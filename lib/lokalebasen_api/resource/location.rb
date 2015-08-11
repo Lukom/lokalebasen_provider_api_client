@@ -30,7 +30,9 @@ module LokalebasenApi
       end
 
       def update(external_key, location_params)
-        update_response = location_resource_agent(external_key).rels[:self].put(location_params)
+        update_response =
+          location_resource_agent(external_key).rels[:self].put(location_params)
+
         LokalebasenApi::ResponseChecker.check(update_response) do |response|
           response.data.location
         end
@@ -49,49 +51,54 @@ module LokalebasenApi
       def set_state_and_return_location(external_key, state)
         relation = location_resource_agent(external_key).rels[state]
         return unless relation
+
         LokalebasenApi::ResponseChecker.check(relation.post) do |response|
           response.data.location
         end
       end
 
       def location_resource_agent(external_key)
-        detect_location_from(all, external_key) do |location|
-          LokalebasenApi::ResponseChecker.check(location.rels[:self].get) do |response|
-            resource = response.data.location
-            permit_http_method!(resource.rels[:self], :put)
-            permit_http_method!(resource.rels[:deactivation], :post)
-            permit_http_method!(resource.rels[:activation], :post)
-            permit_http_method!(resource.rels[:photos], :post)
-            permit_http_method!(resource.rels[:prospectuses], :post)
-            permit_http_method!(resource.rels[:floor_plans], :post)
-            permit_http_method!(resource.rels[:subscriptions], :post)
-            resource
+        location = detect_location_from(all, external_key)
+        location_response = location.rels[:self].get
+
+        LokalebasenApi::ResponseChecker.check(location_response) do |response|
+          response.data.location.tap do |resource|
+            permit_resource(resource)
           end
         end
       end
 
       def location_list_resource_agent
-        LokalebasenApi::ResponseChecker.check(get_locations) do |response|
-          resource = response.data
-          permit_http_method!(resource.rels[:self], :post)
-          resource
+        LokalebasenApi::ResponseChecker.check(locations) do |response|
+          response.data.tap do |resource|
+            permit_http_method!(resource.rels[:self], :post)
+          end
         end
       end
 
       def detect_location_from(locations, external_key)
-        location = locations.detect { |location| location.external_key == external_key }
+        location = locations.detect { |l| l.external_key == external_key }
+
         if location.nil?
-          fail LokalebasenApi::NotFoundException.new("Location with external_key '#{external_key}', not found!")
+          fail LokalebasenApi::NotFoundException,
+               "Location with external_key '#{external_key}', not found!"
         end
-        if block_given?
-          yield location
-        else
-          location
-        end
+
+        location
       end
 
-      def get_locations
+      def locations
         root_resource.rels[:locations].get
+      end
+
+      def permit_resource(resource)
+        permit_http_method!(resource.rels[:self], :put)
+        permit_http_method!(resource.rels[:deactivation], :post)
+        permit_http_method!(resource.rels[:activation], :post)
+        permit_http_method!(resource.rels[:photos], :post)
+        permit_http_method!(resource.rels[:prospectuses], :post)
+        permit_http_method!(resource.rels[:floor_plans], :post)
+        permit_http_method!(resource.rels[:subscriptions], :post)
       end
     end
   end

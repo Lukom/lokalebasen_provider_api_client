@@ -12,13 +12,35 @@ shared_examples 'an asset' do |resource_name, asset_data_key|
   end
 
   before do
-    stub_get(faraday_stubs, '/api/provider', 200, root_fixture)
-    stub_get(faraday_stubs, '/api/provider/locations', 200, location_list_fixture)
+    stub_get(
+      faraday_stubs,
+      '/api/provider',
+      200,
+      root_fixture
+    )
+
+    stub_get(
+      faraday_stubs,
+      '/api/provider/locations',
+      200,
+      location_list_fixture
+    )
   end
 
   it 'performs the correct requests on creation' do
-    stub_get(faraday_stubs, '/api/provider/locations/123', 200, location_fixture)
-    stub_post(faraday_stubs, "/api/provider/locations/123/#{resource_name}", 202, asset_job_fixture)
+    stub_get(
+      faraday_stubs,
+      '/api/provider/locations/123',
+      200,
+      location_fixture
+    )
+
+    stub_post(
+      faraday_stubs,
+      "/api/provider/locations/123/#{resource_name}",
+      202,
+      asset_job_fixture
+    )
 
     asset_url = 'http://host.com/path/to/asset.png'
     asset_resource.public_send(:create, asset_url, asset_external_key)
@@ -27,7 +49,12 @@ shared_examples 'an asset' do |resource_name, asset_data_key|
   end
 
   it 'posts with the correct parameters' do
-    stub_get(faraday_stubs, '/api/provider/locations/123', 200, location_fixture)
+    stub_get(
+      faraday_stubs,
+      '/api/provider/locations/123',
+      200,
+      location_fixture
+    )
 
     params = {
       asset_data_key => {
@@ -46,8 +73,19 @@ shared_examples 'an asset' do |resource_name, asset_data_key|
   end
 
   it 'returns a sawyer resource on creation' do
-    stub_get(faraday_stubs, '/api/provider/locations/123', 200, location_fixture)
-    stub_post(faraday_stubs, "/api/provider/locations/123/#{resource_name}", 202, asset_job_fixture)
+    stub_get(
+      faraday_stubs,
+      '/api/provider/locations/123',
+      200,
+      location_fixture
+    )
+
+    stub_post(
+      faraday_stubs,
+      "/api/provider/locations/123/#{resource_name}",
+      202,
+      asset_job_fixture
+    )
 
     asset = asset_resource.public_send(:create, asset_url, asset_external_key)
 
@@ -59,8 +97,19 @@ shared_examples 'an asset' do |resource_name, asset_data_key|
   end
 
   it 'performs the correct requests on deletion' do
-    stub_get(faraday_stubs, '/api/provider/locations/123', 200, location_fixture)
-    stub_delete(faraday_stubs, "/api/provider/#{resource_name}/1", 200, location_fixture)
+    stub_get(
+      faraday_stubs,
+      '/api/provider/locations/123',
+      200,
+      location_fixture
+    )
+
+    stub_delete(
+      faraday_stubs,
+      "/api/provider/#{resource_name}/1",
+      200,
+      location_fixture
+    )
 
     asset_resource.public_send(:delete, "#{resource_name}_external_key1")
 
@@ -68,10 +117,24 @@ shared_examples 'an asset' do |resource_name, asset_data_key|
   end
 
   it 'returns the response code 200 on deletion' do
-    stub_get(faraday_stubs, '/api/provider/locations/123', 200, location_fixture)
-    stub_delete(faraday_stubs, "/api/provider/#{resource_name}/1", 200, location_fixture)
+    stub_get(
+      faraday_stubs,
+      '/api/provider/locations/123',
+      200,
+      location_fixture
+    )
 
-    expect(asset_resource.public_send(:delete, "#{resource_name}_external_key1"))
+    stub_delete(
+      faraday_stubs,
+      "/api/provider/#{resource_name}/1",
+      200,
+      location_fixture
+    )
+
+    response =
+      asset_resource.public_send(:delete, "#{resource_name}_external_key1")
+
+    expect(response)
       .to eq(200)
   end
 end

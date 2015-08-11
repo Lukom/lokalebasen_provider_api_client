@@ -25,11 +25,16 @@ describe LokalebasenApi::SubscriptionClient do
       .to receive_message_chain(:new, :mapify)
       .and_return(mapped_subscription)
 
-    expect(LokalebasenApi::SubscriptionClient.new.subscriptions_for_location(location_resource))
+    subscriptions =
+      LokalebasenApi::SubscriptionClient
+        .new
+        .subscriptions_for_location(location_resource)
+
+    expect(subscriptions)
       .to match_array([mapped_subscription])
   end
 
-  it 'creates a sugsbscription by a given location resource and contact resource' do
+  it 'creates a subscription by a given location and contact resource' do
     allow(LokalebasenApi::Resource::Subscription)
       .to receive(:new)
       .and_return(subscription_resource)
@@ -54,7 +59,12 @@ describe LokalebasenApi::SubscriptionClient do
       .to receive_message_chain(:new, :mapify)
       .and_return(mapped_subscription)
 
-    expect(LokalebasenApi::SubscriptionClient.new.create_subscription(location_resource, contact_resource))
+    subscriptions =
+      LokalebasenApi::SubscriptionClient
+        .new
+        .create_subscription(location_resource, contact_resource)
+
+    expect(subscriptions)
       .to eq(mapped_subscription)
   end
 

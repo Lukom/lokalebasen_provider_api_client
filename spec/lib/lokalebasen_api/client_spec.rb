@@ -14,8 +14,19 @@ describe LokalebasenApi::Client do
   end
 
   before do
-    stub_get(faraday_stubs, '/api/provider', 200, root_fixture)
-    stub_get(faraday_stubs, '/api/provider/locations', 200, location_list_fixture)
+    stub_get(
+      faraday_stubs,
+      '/api/provider',
+      200,
+      root_fixture
+    )
+
+    stub_get(
+      faraday_stubs,
+      '/api/provider/locations',
+      200,
+      location_list_fixture
+    )
   end
 
   it 'finds all locations' do
@@ -31,16 +42,24 @@ describe LokalebasenApi::Client do
   end
 
   it 'finds a location by the external key' do
-    stub_get(faraday_stubs, '/api/provider/locations/123', 200, location_fixture)
-
-    expected_value = { 'external_key' => 'location_ext_key' }
+    stub_get(
+      faraday_stubs,
+      '/api/provider/locations/123',
+      200,
+      location_fixture
+    )
 
     expect(client.location('location_ext_key'))
       .to include(fixture_to_response(location_fixture))
   end
 
-  it 'fails with NotFoundException if the no location is found with the given external key' do
-    stub_get(faraday_stubs, '/api/provider/locations/123', 404, error_fixture)
+  it 'fails if no location is found with the given external key' do
+    stub_get(
+      faraday_stubs,
+      '/api/provider/locations/123',
+      404,
+      error_fixture
+    )
 
     expect(lambda do
       client.location('wrong-external-key')
@@ -48,21 +67,36 @@ describe LokalebasenApi::Client do
   end
 
   it 'returns true if a location with given external key exists' do
-    stub_get(faraday_stubs, '/api/provider/locations/123', 200, location_fixture)
+    stub_get(
+      faraday_stubs,
+      '/api/provider/locations/123',
+      200,
+      location_fixture
+    )
 
     expect(client.exists?('location_ext_key'))
       .to eq(true)
   end
 
   it 'returns false if a location with given external key does not exist' do
-    stub_get(faraday_stubs, '/api/provider/locations/123', 200, location_fixture)
+    stub_get(
+      faraday_stubs,
+      '/api/provider/locations/123',
+      200,
+      location_fixture
+    )
 
     expect(client.exists?('fake_external_key'))
       .to eq(false)
   end
 
   it 'creates a location' do
-    stub_post(faraday_stubs, '/api/provider/locations', 201, location_fixture)
+    stub_post(
+      faraday_stubs,
+      '/api/provider/locations',
+      201,
+      location_fixture
+    )
 
     location = { 'location' => { 'external_key' => 'location_ext_key' } }
 
@@ -73,7 +107,12 @@ describe LokalebasenApi::Client do
   end
 
   it 'fails with RuntimeError if creation fails' do
-    stub_post(faraday_stubs, '/api/provider/locations', 402, error_fixture)
+    stub_post(
+      faraday_stubs,
+      '/api/provider/locations',
+      402,
+      error_fixture
+    )
 
     location = { 'location' => { 'external_key' => 'location_ext_key' } }
 
@@ -83,8 +122,19 @@ describe LokalebasenApi::Client do
   end
 
   it 'updates a location' do
-    stub_get(faraday_stubs, '/api/provider/locations/123', 200, location_fixture)
-    stub_put(faraday_stubs, '/api/provider/locations/123', 200, location_fixture)
+    stub_get(
+      faraday_stubs,
+      '/api/provider/locations/123',
+      200,
+      location_fixture
+    )
+
+    stub_put(
+      faraday_stubs,
+      '/api/provider/locations/123',
+      200,
+      location_fixture
+    )
 
     location = { 'location' => { 'external_key' => 'location_ext_key' } }
 
@@ -95,8 +145,19 @@ describe LokalebasenApi::Client do
   end
 
   it 'fails with RuntimeError if location update fails' do
-    stub_get(faraday_stubs, '/api/provider/locations/123', 200, location_fixture)
-    stub_put(faraday_stubs, '/api/provider/locations/123', 402, error_fixture)
+    stub_get(
+      faraday_stubs,
+      '/api/provider/locations/123',
+      200,
+      location_fixture
+    )
+
+    stub_put(
+      faraday_stubs,
+      '/api/provider/locations/123',
+      402,
+      error_fixture
+    )
 
     location = { 'location' => { 'external_key' => 'location_ext_key' } }
 
@@ -106,10 +167,19 @@ describe LokalebasenApi::Client do
   end
 
   it 'deactivates a location' do
-    stub_get(faraday_stubs, '/api/provider/locations/123', 200, location_fixture)
-    stub_post(faraday_stubs, '/api/provider/locations/123/deactivations', 200, location_fixture)
+    stub_get(
+      faraday_stubs,
+      '/api/provider/locations/123',
+      200,
+      location_fixture
+    )
 
-    expected_value = { 'external_key' => 'location_ext_key' }
+    stub_post(
+      faraday_stubs,
+      '/api/provider/locations/123/deactivations',
+      200,
+      location_fixture
+    )
 
     expect(client.deactivate('location_ext_key'))
       .to include(fixture_to_response(location_fixture))
@@ -117,9 +187,20 @@ describe LokalebasenApi::Client do
     faraday_stubs.verify_stubbed_calls
   end
 
-  it 'fails with RuntimeError if the location to be deactivated does not exist' do
-    stub_get(faraday_stubs, '/api/provider/locations/123', 200, location_fixture)
-    stub_post(faraday_stubs, '/api/provider/locations/123/deactivations', 404, error_fixture)
+  it 'fails if the location to be deactivated does not exist' do
+    stub_get(
+      faraday_stubs,
+      '/api/provider/locations/123',
+      200,
+      location_fixture
+    )
+
+    stub_post(
+      faraday_stubs,
+      '/api/provider/locations/123/deactivations',
+      404,
+      error_fixture
+    )
 
     expect(lambda do
       client.deactivate('location_ext_key')
@@ -127,8 +208,19 @@ describe LokalebasenApi::Client do
   end
 
   it 'activates a location' do
-    stub_get(faraday_stubs, '/api/provider/locations/123', 200, location_fixture)
-    stub_post(faraday_stubs, '/api/provider/locations/123/activations', 200, location_fixture)
+    stub_get(
+      faraday_stubs,
+      '/api/provider/locations/123',
+      200,
+      location_fixture
+    )
+
+    stub_post(
+      faraday_stubs,
+      '/api/provider/locations/123/activations',
+      200,
+      location_fixture
+    )
 
     expect(client.activate('location_ext_key'))
       .to include(fixture_to_response(location_fixture))
@@ -137,8 +229,19 @@ describe LokalebasenApi::Client do
   end
 
   it 'fails with RuntimeError if the location to be activated does not exist' do
-    stub_get(faraday_stubs, '/api/provider/locations/123', 200, location_fixture)
-    stub_post(faraday_stubs, '/api/provider/locations/123/activations', 404, location_fixture)
+    stub_get(
+      faraday_stubs,
+      '/api/provider/locations/123',
+      200,
+      location_fixture
+    )
+
+    stub_post(
+      faraday_stubs,
+      '/api/provider/locations/123/activations',
+      404,
+      location_fixture
+    )
 
     expect(lambda do
       client.activate('location_ext_key')
@@ -147,8 +250,19 @@ describe LokalebasenApi::Client do
 
   shared_examples 'an asset client and' do |asset_type, resource_name|
     it "creates a #{asset_type}" do
-      stub_get(faraday_stubs, '/api/provider/locations/123', 200, location_fixture)
-      stub_post(faraday_stubs, "/api/provider/locations/123/#{resource_name}", 202, asset_job_fixture)
+      stub_get(
+        faraday_stubs,
+        '/api/provider/locations/123',
+        200,
+        location_fixture
+      )
+
+      stub_post(
+        faraday_stubs,
+        "/api/provider/locations/123/#{resource_name}",
+        202,
+        asset_job_fixture
+      )
 
       expect(
         client.public_send(
@@ -163,8 +277,19 @@ describe LokalebasenApi::Client do
     end
 
     it "fails with RuntimeError if creation of #{asset_type} fails" do
-      stub_get(faraday_stubs, '/api/provider/locations/123', 200, location_fixture)
-      stub_post(faraday_stubs, "/api/provider/locations/123/#{resource_name}", 402, asset_job_fixture)
+      stub_get(
+        faraday_stubs,
+        '/api/provider/locations/123',
+        200,
+        location_fixture
+      )
+
+      stub_post(
+        faraday_stubs,
+        "/api/provider/locations/123/#{resource_name}",
+        402,
+        asset_job_fixture
+      )
 
       expect(lambda do
         client.public_send(
@@ -177,8 +302,19 @@ describe LokalebasenApi::Client do
     end
 
     it "deletes a #{asset_type}" do
-      stub_get(faraday_stubs, '/api/provider/locations/123', 200, location_fixture)
-      stub_delete(faraday_stubs, "/api/provider/#{resource_name}/1", 200, location_fixture)
+      stub_get(
+        faraday_stubs,
+        '/api/provider/locations/123',
+        200,
+        location_fixture
+      )
+
+      stub_delete(
+        faraday_stubs,
+        "/api/provider/#{resource_name}/1",
+        200,
+        location_fixture
+      )
 
       expect(
         client.public_send(
@@ -191,9 +327,20 @@ describe LokalebasenApi::Client do
       faraday_stubs.verify_stubbed_calls
     end
 
-    it 'fails with NotFoundException if trying to delete asset with wrong external key' do
-      stub_get(faraday_stubs, '/api/provider/locations/123', 200, location_fixture)
-      stub_delete(faraday_stubs, "/api/provider/#{resource_name}/1", 402, location_fixture)
+    it 'fails if trying to delete asset with wrong external key' do
+      stub_get(
+        faraday_stubs,
+        '/api/provider/locations/123',
+        200,
+        location_fixture
+      )
+
+      stub_delete(
+        faraday_stubs,
+        "/api/provider/#{resource_name}/1",
+        402,
+        location_fixture
+      )
 
       expect(lambda do
         client.public_send(
