@@ -1,7 +1,31 @@
-require "bundler/gem_tasks"
+require 'bundler/gem_tasks'
 Bundler::GemHelper.install_tasks
 
 require 'rspec/core/rake_task'
-RSpec::Core::RakeTask.new(:spec)
+require 'rubocop/rake_task'
 
-task :default => :spec
+namespace :specs do
+  RSpec::Core::RakeTask.new(:spec) do |t|
+    t.pattern = 'spec'
+  end
+
+  RuboCop::RakeTask.new(:rubocop) do |t|
+    t.options << '-R'
+  end
+
+  task :all do
+    exit_code = 0
+
+    %w(spec rubocop).each do |task_name|
+      begin
+        Rake::Task["specs:#{task_name}"].invoke
+      rescue Exception
+        exit_code = 1
+      end
+    end
+
+    exit exit_code
+  end
+end
+
+task default: 'specs:all'
