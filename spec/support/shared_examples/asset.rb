@@ -40,7 +40,7 @@ shared_examples "an asset" do |resource_name, asset_data_key|
     expect(location_resource.rels[resource_name])
       .to receive(:post)
       .with(params)
-      .and_return(double.as_null_object)
+      .and_return(double('response', status: 200).as_null_object)
 
     asset_resource.public_send(:create, asset_url, asset_external_key, 1)
   end
