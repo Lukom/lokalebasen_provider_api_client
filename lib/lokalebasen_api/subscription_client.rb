@@ -11,10 +11,14 @@ module LokalebasenApi
     end
 
     def create_subscription(location_resource, contact_resource)
-      subscription_params = { :contact => contact_resource.rels[:self].href }
-      Mapper::Subscription.new(
-        Resource::Subscription.new(location_resource).create(subscription_params)
-      ).mapify
+      subscription_params = { contact: contact_resource.rels[:self].href }
+
+      subscription =
+        Resource::Subscription
+          .new(location_resource)
+          .create(subscription_params)
+
+      Mapper::Subscription.new(subscription).mapify
     end
   end
 end

@@ -1,6 +1,6 @@
 module SawyerStubs
   def agent_mock(faraday_stubs)
-    Sawyer::Agent.new "http://lokalebasen.dev/api/provider" do |conn|
+    Sawyer::Agent.new 'http://lokalebasen.dev/api/provider' do |conn|
       conn.builder.handlers.delete(Faraday::Adapter::NetHttp)
       conn.adapter :test, faraday_stubs
     end
@@ -23,10 +23,10 @@ module SawyerStubs
   end
 
   def stub_request(method, faraday_stubs, url, status, response_hash)
-    faraday_stubs.public_send(method, url) do |env|
+    faraday_stubs.public_send(method, url) do |_env|
       [
         status,
-        {'Content-Type' => 'application/json'},
+        { 'Content-Type' => 'application/json' },
         Sawyer::Agent.encode(response_hash)
       ]
     end

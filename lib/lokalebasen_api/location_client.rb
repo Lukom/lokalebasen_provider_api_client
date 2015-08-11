@@ -15,8 +15,10 @@ module LokalebasenApi
     end
 
     # Returns specified location for the current provider
-    # @param location_ext_key [String] external_key for location guid e.g. "39PQ32KUC6BSC3AS"
-    # @raise [RuntimeError] if location not found, e.g. "Location with external_key 'LOC_EXT_KEY', not found!"
+    # @param location_ext_key [String] external_key for location guid
+    #        e.g. "39PQ32KUC6BSC3AS"
+    # @raise [RuntimeError] if location not found,
+    #        e.g. "Location with external_key 'LOC_EXT_KEY', not found!"
     # @return [Map] location
     def location(location_ext_key)
       Mapper::Location.new(
@@ -25,13 +27,14 @@ module LokalebasenApi
     end
 
     # Returns true if locations having location_ext_key exists
-    # @param location_ext_key [String] external_key for location guid e.g. "39PQ32KUC6BSC3AS"
+    # @param location_ext_key [String] external_key for location guid
+    #        e.g. "39PQ32KUC6BSC3AS"
     # @return [Boolean] exists?
     def exists?(location_ext_key)
       location_resource.exists?(location_ext_key)
     end
 
-    # @param location [Hash] e.g. { :location => { :title => "" .. } }
+    # @param location [Hash] e.g. { location: { title: "" .. } }
     # @return [Map] created location
     def create_location(location)
       Mapper::Location.new(
@@ -39,15 +42,16 @@ module LokalebasenApi
       ).mapify
     end
 
-     # @return [Map] updated location
+    # @return [Map] updated location
     def update_location(location)
       Mapper::Location.new(
-        location_resource.update(location["location"]["external_key"], location)
+        location_resource.update(location['location']['external_key'], location)
       ).mapify
     end
 
     # Deactivates the specified location
-    # @param location_ext_key [String] external_key for location guid e.g. "39PQ32KUC6BSC3AS"
+    # @param location_ext_key [String] external_key for location guid
+    #        e.g. "39PQ32KUC6BSC3AS"
     # @return [Map] location
     def deactivate(external_key)
       Mapper::Location.new(
@@ -56,7 +60,8 @@ module LokalebasenApi
     end
 
     # Activates the specified location
-    # @param location_ext_key [String] external_key for location guid e.g. "39PQ32KUC6BSC3AS"
+    # @param location_ext_key [String] external_key for location guid
+    #        e.g. "39PQ32KUC6BSC3AS"
     # @return [Map] location
     def activate(external_key)
       Mapper::Location.new(
@@ -66,9 +71,13 @@ module LokalebasenApi
 
     # Creates a photo create background job on the specified location
     # @return [Map] created job
-    def create_photo(photo_url, photo_ext_key, location_ext_key, position=nil)
+    def create_photo(photo_url, photo_ext_key, location_ext_key, position = nil)
       location = location_resource.find_by_external_key(location_ext_key)
-      photo = Resource::Photo.new(location).create(photo_url, photo_ext_key, position)
+
+      photo =
+        Resource::Photo.new(location)
+                       .create(photo_url, photo_ext_key, position)
+
       Mapper::Job.new(photo).mapify
     end
 
@@ -78,7 +87,8 @@ module LokalebasenApi
     end
 
     # Deletes specified photo
-    # @raise [RuntimeError] if Photo not found, e.g. "Photo with external_key 'PHOTO_EXT_KEY', not found!"
+    # @raise [RuntimeError] if Photo not found,
+    #         e.g. "Photo with external_key 'PHOTO_EXT_KEY', not found!"
     # @return [void]
     def delete_photo(photo_ext_key, location_ext_key)
       location = location_resource.find_by_external_key(location_ext_key)
@@ -95,7 +105,8 @@ module LokalebasenApi
     end
 
     # Deletes specified floorplan
-    # @raise [RuntimeError] if Floorplan not found, e.g. "Floorplan with external_key 'FLOORPLAN_EXT_KEY', not found!"
+    # @raise [RuntimeError] if Floorplan not found,
+    #        e.g. "Floorplan with external_key 'FLOORPLAN_EXT_KEY', not found!"
     # @return [void]
     def delete_prospectus(prospectus_ext_key, location_ext_key)
       location = location_resource.find_by_external_key(location_ext_key)
@@ -104,15 +115,19 @@ module LokalebasenApi
 
     # Creates a floorplan create background job on the specified location
     # @return [Map] created job
-    def create_floorplan(floor_plan_url, floor_plan_ext_key, location_ext_key, position=nil)
-      location = location_resource.find_by_external_key(location_ext_key)
-      floor_plan = Resource::FloorPlan.new(location).create(floor_plan_url,
-                                                            floor_plan_ext_key, position)
+    def create_floorplan(fplan_url, fplan_ext_key, lext_key, position = nil)
+      location = location_resource.find_by_external_key(lext_key)
+
+      floor_plan =
+        Resource::FloorPlan.new(location)
+                           .create(fplan_url, fplan_ext_key, position)
+
       Mapper::Job.new(floor_plan).mapify
     end
 
     # Deletes specified floorplan
-    # @raise [RuntimeError] if Floorplan not found, e.g. "Floorplan with external_key 'FLOORPLAN_EXT_KEY', not found!"
+    # @raise [RuntimeError] if Floorplan not found,
+    #        e.g. "Floorplan with external_key 'FLOORPLAN_EXT_KEY', not found!"
     # @return [void]
     def delete_floorplan(floor_plan_ext_key, location_ext_key)
       location = location_resource.find_by_external_key(location_ext_key)

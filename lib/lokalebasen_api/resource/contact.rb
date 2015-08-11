@@ -25,7 +25,10 @@ module LokalebasenApi
 
       def create(contact_params)
         create_response =
-          contact_list_resource_agent.rels[:self].post(contact_params)
+          contact_list_resource_agent
+            .rels[:self]
+            .post(contact_params)
+
         LokalebasenApi::ResponseChecker.check(create_response) do |response|
           response.data.contact
         end
@@ -33,7 +36,10 @@ module LokalebasenApi
 
       def update_by_resource(resource, contact_params)
         update_response =
-          contact_resource_agent_by_resource(resource).rels[:self].put(contact_params)
+          contact_resource_agent_by_resource(resource)
+            .rels[:self]
+            .put(contact_params)
+
         LokalebasenApi::ResponseChecker.check(update_response) do |response|
           response.data.contact
         end
@@ -48,15 +54,16 @@ module LokalebasenApi
       end
 
       def contact_resource_agent_by_resource(resource)
-        LokalebasenApi::ResponseChecker.check(resource.rels[:self].get) do |response|
-          contact_resource = response.data.contact
-          permit_http_method!(contact_resource.rels[:self], :put)
-          contact_resource
+        contact_response = resource.rels[:self].get
+        LokalebasenApi::ResponseChecker.check(contact_response) do |response|
+          response.data.contact.tap do |contact_resource|
+            permit_http_method!(contact_resource.rels[:self], :put)
+          end
         end
       end
 
       def contact_list_resource_agent
-        LokalebasenApi::ResponseChecker.check(get_contacts) do |response|
+        LokalebasenApi::ResponseChecker.check(contacts) do |response|
           resource = response.data
           permit_http_method!(resource.rels[:self], :post)
           resource
@@ -64,14 +71,17 @@ module LokalebasenApi
       end
 
       def find_contact_from_contact_list(external_key)
-        contact = all.detect { |contact| contact.external_key == external_key }
+        contact = all.detect { |c| c.external_key == external_key }
+
         if contact.nil?
-          raise LokalebasenApi::NotFoundException.new("Contact with external_key '#{external_key}', not found!")
+          fail LokalebasenApi::NotFoundException,
+               "Contact with external_key '#{external_key}', not found!"
         end
+
         yield contact
       end
 
-      def get_contacts
+      def contacts
         root_resource.rels[:contacts].get
       end
     end

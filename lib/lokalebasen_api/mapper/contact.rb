@@ -8,7 +8,7 @@ module LokalebasenApi
       end
 
       def mapify
-        res =  Map.new(resource)
+        res = Map.new(resource)
         res = Map.new(res.to_hash) # Minor hack
         res.resource = resource
         res

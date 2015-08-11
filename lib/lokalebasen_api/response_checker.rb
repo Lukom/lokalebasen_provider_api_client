@@ -12,26 +12,30 @@ module LokalebasenApi
       @response = response
     end
 
-    def check
-      case response.status
-        when (400..499) then (fail "Error occured -> #{response.data.message}")
-        when (500..599) then (fail "Server error -> #{error_msg(response)}")
-      end
-      if block_given?
-        yield response
-      else
+    def check(&block)
+      check_status
+
+      if block.nil?
         response
+      else
+        yield response
       end
     end
 
     private
 
-    def error_msg(response)
-      if response.data.index("html")
-        "Server returned HTML in error"
-      else
-        response.data
+    def check_status
+      case response.status
+      when 400..499
+        fail "Error occured -> #{response.data.message}"
+      when 500..599
+        fail "Server error -> #{error_msg(response)}"
       end
+    end
+
+    def error_msg(response)
+      return 'Server returned HTML in error' if response.data.index('html')
+      response.data
     end
   end
 end

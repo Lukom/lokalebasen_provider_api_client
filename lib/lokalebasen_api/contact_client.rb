@@ -23,8 +23,10 @@ module LokalebasenApi
 
     # Returns specified contact for the current provider identified by
     # the external key
-    # @param external_key [String] external_key for contact guid e.g. "39PQ32KUC6BSC3AS"
-    # @raise [RuntimeError] if context not found, e.g. "Contact with external_key 'CON_EXT_KEY', not found!"
+    # @param external_key [String] external_key for contact guid
+    #        e.g. "39PQ32KUC6BSC3AS"
+    # @raise [RuntimeError] if context not found,
+    #        e.g. "Contact with external_key 'CON_EXT_KEY', not found!"
     # @return [Map] contact
     def find_contact_by_external_key(external_key)
       Mapper::Contact.new(
@@ -50,12 +52,12 @@ module LokalebasenApi
 
     private
 
-      def contact_resource
-        Resource::Contact.new(root_resource)
-      end
+    def contact_resource
+      Resource::Contact.new(root_resource)
+    end
 
-      def root_resource
-        Resource::Root.new(agent).get
-      end
+    def root_resource
+      Resource::Root.new(agent).get
+    end
   end
 end

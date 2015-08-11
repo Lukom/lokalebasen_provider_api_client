@@ -2,12 +2,12 @@ require 'spec_helper'
 
 module LokalebasenApi
   describe ContactClient do
-    let(:agent)          { double("Agent") }
-    let(:mapped_contact) { double("MappedContact") }
+    let(:agent)          { double('Agent') }
+    let(:mapped_contact) { double('MappedContact') }
 
     let(:contact_params) do
       {
-        external_key: "ext_key"
+        external_key: 'ext_key'
       }
     end
 
@@ -20,8 +20,8 @@ module LokalebasenApi
         .and_return(mapped_contact)
     end
 
-    it "returns all contacts as maps" do
-      contact_resources = 2.times.map { double("ContactResource") }
+    it 'returns all contacts as maps' do
+      contact_resources = 2.times.map { double('ContactResource') }
 
       allow(Resource::Contact)
         .to receive_message_chain(:new, :all)
@@ -33,16 +33,16 @@ module LokalebasenApi
         .to eq(mapped_contacts)
     end
 
-    it "returns a mapped contact resource by external key" do
+    it 'returns a mapped contact resource by external key' do
       allow(Resource::Contact)
         .to receive_message_chain(:new, :find_by_external_key)
 
-      expect(ContactClient.new(agent).find_contact_by_external_key("ext_key"))
+      expect(ContactClient.new(agent).find_contact_by_external_key('ext_key'))
         .to eq(mapped_contact)
     end
 
-    it "creates a contact" do
-      contact_resource = double("ContactResource")
+    it 'creates a contact' do
+      contact_resource = double('ContactResource')
 
       allow(Resource::Contact)
         .to receive(:new)
@@ -55,17 +55,17 @@ module LokalebasenApi
       ContactClient.new(agent).create_contact(contact_params)
     end
 
-    it "returns a mapped contact of the respone from contact create" do
+    it 'returns a mapped contact of the respone from contact create' do
       allow(Resource::Contact)
         .to receive_message_chain(:new, :create)
 
-      expect(ContactClient.new(agent).create_contact("ext_key"))
+      expect(ContactClient.new(agent).create_contact('ext_key'))
         .to eq(mapped_contact)
     end
 
-    it "updates a contact" do
-      input_resource = double("Resource")
-      contact_resource = double("ContactResource")
+    it 'updates a contact' do
+      input_resource = double('Resource')
+      contact_resource = double('ContactResource')
 
       allow(Resource::Contact)
         .to receive(:new)
@@ -75,17 +75,24 @@ module LokalebasenApi
         .to receive(:update_by_resource)
         .with(input_resource, contact_params)
 
-      ContactClient.new(agent).update_contact_by_resource(input_resource, contact_params)
+      ContactClient
+        .new(agent)
+        .update_contact_by_resource(input_resource, contact_params)
     end
 
-    it "returns a mapped contact of the respone from contact update" do
-      input_resource = double("Resource")
+    it 'returns a mapped contact of the respone from contact update' do
+      input_resource = double('Resource')
       params = { contact: contact_params }
 
       allow(Resource::Contact)
         .to receive_message_chain(:new, :update_by_resource)
 
-      expect(ContactClient.new(agent).update_contact_by_resource(input_resource, params))
+      contacts =
+        ContactClient
+          .new(agent)
+          .update_contact_by_resource(input_resource, params)
+
+      expect(contacts)
         .to eq(mapped_contact)
     end
   end
