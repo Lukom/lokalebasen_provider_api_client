@@ -27,7 +27,7 @@ module LokalebasenApi
     def check_status
       case response.status
       when 400..499
-        fail "Error occured -> #{response.data.message}"
+        fail "Error occured -> #{response.data.error_message}"
       when 500..599
         fail "Server error -> #{error_msg(response)}"
       end

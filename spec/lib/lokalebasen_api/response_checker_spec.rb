@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe LokalebasenApi::ResponseChecker do
-  let(:data_with_message) { double('Data', message: 'ErrorMessage') }
+  let(:data_with_message) { double('Data', error_message: 'ErrorMessage') }
   let(:raw_data)          { double('Data', index: false, to_s: 'RawError') }
 
   it 'fails with response error message if response status is 400' do
