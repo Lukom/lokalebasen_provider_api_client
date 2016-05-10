@@ -2,21 +2,16 @@ require 'bundler/gem_tasks'
 Bundler::GemHelper.install_tasks
 
 require 'rspec/core/rake_task'
-require 'rubocop/rake_task'
 
 namespace :specs do
   RSpec::Core::RakeTask.new(:spec) do |t|
     t.pattern = 'spec'
   end
 
-  RuboCop::RakeTask.new(:rubocop) do |t|
-    t.options << '-D'
-  end
-
   task :all do
     exit_code = 0
 
-    %w(spec rubocop).each do |task_name|
+    %w(spec).each do |task_name|
       begin
         Rake::Task["specs:#{task_name}"].invoke
       rescue Exception
