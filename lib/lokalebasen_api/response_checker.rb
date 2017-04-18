@@ -27,7 +27,7 @@ module LokalebasenApi
     def check_status
       case response.status
       when 400..499
-        raise LokalebasenApi::Exceptions::InvalidResponse.new(response.data)
+        raise LokalebasenApi::InvalidResponseError.new(response.data)
       when 500..599
         fail "Server error -> #{error_msg(response)}"
       end

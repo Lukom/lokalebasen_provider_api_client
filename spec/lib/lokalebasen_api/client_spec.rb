@@ -106,7 +106,7 @@ describe LokalebasenApi::Client do
     faraday_stubs.verify_stubbed_calls
   end
 
-  it 'fails with LokalebasenApi::Exceptions::InvalidResponse if creation fails' do
+  it 'fails with LokalebasenApi::InvalidResponseError if creation fails' do
     stub_post(
       faraday_stubs,
       '/api/provider/locations',
@@ -118,7 +118,7 @@ describe LokalebasenApi::Client do
 
     expect(lambda do
       client.create_location(location)
-    end).to raise_error(LokalebasenApi::Exceptions::InvalidResponse)
+    end).to raise_error(LokalebasenApi::InvalidResponseError)
   end
 
   it 'updates a location' do
@@ -144,7 +144,7 @@ describe LokalebasenApi::Client do
     faraday_stubs.verify_stubbed_calls
   end
 
-  it 'fails with LokalebasenApi::Exceptions::InvalidResponse if location update fails' do
+  it 'fails with LokalebasenApi::InvalidResponseError if location update fails' do
     stub_get(
       faraday_stubs,
       '/api/provider/locations/123',
@@ -163,7 +163,7 @@ describe LokalebasenApi::Client do
 
     expect(lambda do
       client.update_location(location)
-    end).to raise_error(LokalebasenApi::Exceptions::InvalidResponse)
+    end).to raise_error(LokalebasenApi::InvalidResponseError)
   end
 
   it 'deactivates a location' do
@@ -204,7 +204,7 @@ describe LokalebasenApi::Client do
 
     expect(lambda do
       client.deactivate('location_ext_key')
-    end).to raise_error(LokalebasenApi::Exceptions::InvalidResponse)
+    end).to raise_error(LokalebasenApi::InvalidResponseError)
   end
 
   it 'activates a location' do
@@ -228,7 +228,7 @@ describe LokalebasenApi::Client do
     faraday_stubs.verify_stubbed_calls
   end
 
-  it 'fails with LokalebasenApi::Exceptions::InvalidResponse if the location to be activated does not exist' do
+  it 'fails with LokalebasenApi::InvalidResponseError if the location to be activated does not exist' do
     stub_get(
       faraday_stubs,
       '/api/provider/locations/123',
@@ -245,7 +245,7 @@ describe LokalebasenApi::Client do
 
     expect(lambda do
       client.activate('location_ext_key')
-    end).to raise_error(LokalebasenApi::Exceptions::InvalidResponse)
+    end).to raise_error(LokalebasenApi::InvalidResponseError)
   end
 
   shared_examples 'an asset client and' do |asset_type, resource_name|
@@ -298,7 +298,7 @@ describe LokalebasenApi::Client do
           'external_key',
           'location_ext_key'
         )
-      end).to raise_error(LokalebasenApi::Exceptions::InvalidResponse)
+      end).to raise_error(LokalebasenApi::InvalidResponseError)
     end
 
     it "deletes a #{asset_type}" do

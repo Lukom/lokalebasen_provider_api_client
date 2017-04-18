@@ -9,7 +9,7 @@ describe LokalebasenApi::ResponseChecker do
 
     expect(lambda do
       LokalebasenApi::ResponseChecker.new(response_400).check
-    end).to raise_error(LokalebasenApi::Exceptions::InvalidResponse)
+    end).to raise_error(LokalebasenApi::InvalidResponseError)
   end
 
   it 'fails with response error message if response status is 404' do
@@ -17,7 +17,7 @@ describe LokalebasenApi::ResponseChecker do
 
     expect(lambda do
       LokalebasenApi::ResponseChecker.new(response_499).check
-    end).to raise_error(LokalebasenApi::Exceptions::InvalidResponse)
+    end).to raise_error(LokalebasenApi::InvalidResponseError)
   end
 
   it 'fails with response data if response status is 500' do
