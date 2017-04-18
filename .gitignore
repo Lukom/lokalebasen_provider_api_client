@@ -2,6 +2,7 @@
 *.gem
 *.yml
 *.rbc
+/.idea/
 .bundle
 .config
 .yardoc

@@ -1,4 +1,5 @@
 require 'lokalebasen_api/version'
+require 'lokalebasen_api/exceptions'
 require 'lokalebasen_api/resource/http_method_permissioning'
 require 'lokalebasen_api/resource/root'
 require 'lokalebasen_api/resource/location'
